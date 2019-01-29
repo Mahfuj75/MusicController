@@ -4,6 +4,7 @@ public class Song {
     private long id;
     private String title;
     private String artist;
+    private int bitRate;
 
     public long getId() {
         return id;
@@ -27,5 +28,13 @@ public class Song {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public int getBitRate() {
+        return bitRate;
+    }
+
+    public void setBitRate(int bitRate) {
+        this.bitRate = bitRate;
     }
 }

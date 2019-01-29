@@ -52,11 +52,13 @@ public class SongAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.song, null);
             TextView songView = view.findViewById(R.id.song_title);
             TextView artistView = view.findViewById(R.id.song_artist);
+            TextView bitRate = view.findViewById(R.id.bitrate);
             //get song using position
             Song currSong = songList.get(position);
             //get title and artist strings
             songView.setText(currSong.getTitle());
             artistView.setText(currSong.getArtist());
+            bitRate.setText(String.format("%s KBPS", String.valueOf(currSong.getBitRate())));
             //set position as tag
             view.setTag(position);
 

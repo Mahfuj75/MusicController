@@ -2,6 +2,8 @@ package com.example.musiccontroller;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     (android.provider.MediaStore.Audio.Media.ARTIST);
             int sizeColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.SIZE);
             int lengthColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
+            int path = musicCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
@@ -88,9 +92,26 @@ public class MainActivity extends AppCompatActivity {
                 song.setId(thisId);
                 song.setTitle(thisTitle);
                 song.setArtist(thisArtist);
-                int size = musicCursor.getInt(sizeColumn);
+                int size = musicCursor.getInt(sizeColumn)*8;
                 int length = musicCursor.getInt(lengthColumn)/1000;
-                int bitRate = size/length;
+                int bitRate = (size/length)/1000;
+                song.setBitRate(bitRate);
+
+                String pathMusic = musicCursor.getString(path);
+                MediaExtractor mex = new MediaExtractor();
+                try {
+                    mex.setDataSource(musicCursor.getString(path));// the adresss location of the sound on sdcard.
+                    MediaFormat mf = mex.getTrackFormat(0);
+                    int xyz = mf.getInteger(MediaFormat.KEY_BIT_RATE);
+                    int sampleRate = mf.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+
+
 
                 songList.add(song);
             }
