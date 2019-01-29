@@ -64,10 +64,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getSongList() {
-        ContentResolver musicResolver = getContentResolver();
         Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
-        String[] STAR=null;
         Cursor musicCursor = getApplicationContext().getContentResolver().query(musicUri, null, null, null, selection);
 
         //Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
@@ -79,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
                     (android.provider.MediaStore.Audio.Media._ID);
             int artistColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.ARTIST);
+            int sizeColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.SIZE);
+            int lengthColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
@@ -88,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 song.setId(thisId);
                 song.setTitle(thisTitle);
                 song.setArtist(thisArtist);
+                int size = musicCursor.getInt(sizeColumn);
+                int length = musicCursor.getInt(lengthColumn)/1000;
+                int bitRate = size/length;
+
                 songList.add(song);
             }
             while (musicCursor.moveToNext());
